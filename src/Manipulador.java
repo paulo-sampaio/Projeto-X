@@ -15,27 +15,10 @@ public class Manipulador {
 
 	}
 
-/*	public static void  main(String args[]) throws IOException {
-		String extensoes; //Variavel que guardará as extensões suportadas
 
-		System.out.println("************Teste de leitura do arquivo de propriedades************");
-		
-		Properties prop = getProp();
-		
-		extensoes = prop.getProperty("prop.extensoes");
-		
-		String extensions[] = extensoes.split(Pattern.quote(","));
-		
-		System.out.println("Login = " + extensions[1]);
-		
-		System.out.println("Login = " + extensoes);
-
-	} */
 	public String getExtensions() throws IOException{
 		
 		String extensoes; //Variavel que guardará as extensões suportadas
-
-		//System.out.println("************Teste de leitura do arquivo de propriedades************");
 		
 		Properties prop = getProp();
 		
@@ -46,7 +29,7 @@ public class Manipulador {
 		
 	}
 	
-	public String getLocalIndice(){
+	public String getLocalIndice() throws IOException{
 		
 		Properties prop = getProp();
 	
@@ -56,7 +39,7 @@ public class Manipulador {
 		
 	}
 	
-	public String getLocalDocs(){
+	public String getLocalDocs() throws IOException{
 		
 		Properties prop = getProp();
 		

@@ -37,9 +37,9 @@ public class TextFileIndexer {
 	  //System.out.println("Enter the path where the index will be created: (e.g. /tmp/index or c:\\temp\\index)");
 
     String indexLocation = null;
-    /*BufferedReader br = new BufferedReader(
+    BufferedReader br = new BufferedReader(
             new InputStreamReader(System.in)); 
-    String s = br.readLine();*/
+    //String s = br.readLine();
     String s = manipulador.getLocalIndice();
     		
     TextFileIndexer indexer = null;
@@ -47,7 +47,7 @@ public class TextFileIndexer {
       indexLocation = s;
       indexer = new TextFileIndexer(s);
     } catch (Exception ex) {
-      System.out.println("Impossivel criar indice..." + ex.getMessage());
+      System.out.println("Impossivel criar indice em " + s + ". " + ex.getMessage());
       System.exit(-1);
     }
 
