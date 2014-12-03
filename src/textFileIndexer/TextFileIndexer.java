@@ -32,19 +32,22 @@ public class TextFileIndexer {
 
 
   public static void main(String[] args) throws IOException {
-    System.out.println("Enter the path where the index will be created: (e.g. /tmp/index or c:\\temp\\index)");
+	  Manipulador manipulador = new Manipulador();
+	  String extensoes = manipulador.getExtensions();
+	  //System.out.println("Enter the path where the index will be created: (e.g. /tmp/index or c:\\temp\\index)");
 
     String indexLocation = null;
-    BufferedReader br = new BufferedReader(
-            new InputStreamReader(System.in));
-    String s = br.readLine();
-
+    /*BufferedReader br = new BufferedReader(
+            new InputStreamReader(System.in)); 
+    String s = br.readLine();*/
+    String s = manipulador.getLocalIndice();
+    		
     TextFileIndexer indexer = null;
     try {
       indexLocation = s;
       indexer = new TextFileIndexer(s);
     } catch (Exception ex) {
-      System.out.println("Cannot create index..." + ex.getMessage());
+      System.out.println("Impossivel criar indice..." + ex.getMessage());
       System.exit(-1);
     }
 
@@ -53,8 +56,8 @@ public class TextFileIndexer {
     //===================================================
     while (!s.equalsIgnoreCase("q")) {
       try {
-        System.out.println("Enter the full path to add into the index (q=quit): (e.g. /home/ron/mydir or c:\\Users\\ron\\mydir)");
-        System.out.println("[Acceptable file types: .xml, .html, .html, .txt]");
+        System.out.println("Entre com um diretorio para ser indexado (q=sair): (Ex.: /home/ron/mydir or c:\\Users\\ron\\mydir)");
+        System.out.println("[Arquivos aceitos: " + extensoes + "]");
         s = br.readLine();
         if (s.equalsIgnoreCase("q")) {
           break;
@@ -63,7 +66,7 @@ public class TextFileIndexer {
         //try to add file into the index
         indexer.indexFileOrDirectory(s);
       } catch (Exception e) {
-        System.out.println("Error indexing " + s + " : " + e.getMessage());
+        System.out.println("Erro ao indexar " + s + " : " + e.getMessage());
       }
     }
 
@@ -169,6 +172,10 @@ public class TextFileIndexer {
   }
 
   private void addFiles(File file) {
+	  
+	  Manipulador manipulador = new Manipulador();
+	  String extensoes = manipulador.getExtensions();
+	  String extensao[] = extensoes.split(Pattern.quote(",")); //transforma string com virgula em array
 
     if (!file.exists()) {
       System.out.println(file + " does not exist.");
@@ -182,11 +189,20 @@ public class TextFileIndexer {
       //===================================================
       // Only index text files
       //===================================================
-      if (filename.endsWith(".htm") || filename.endsWith(".html") || 
+      /* if (filename.endsWith(".htm") || filename.endsWith(".html") || 
               filename.endsWith(".xml") || filename.endsWith(".txt")) {
         queue.add(file);
       } else {
         System.out.println("Skipped " + filename);
+      } */
+      ///LT
+      for(String ext :extensao){
+          if (filename.endsWith('.' + ext)) {
+            queue.add(file);
+          } else {
+            System.out.println("Arquivo não adicionado, extensão invalida. " + filename);
+          }  ///LT
+    	  
       }
     }
   }
