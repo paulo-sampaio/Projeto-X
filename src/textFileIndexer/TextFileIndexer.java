@@ -19,6 +19,7 @@ import org.apache.lucene.util.Version;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  * This terminal application creates an Apache Lucene index in a folder and adds files into this index
@@ -171,7 +172,7 @@ public class TextFileIndexer {
     queue.clear();
   }
 
-  private void addFiles(File file) {
+  private void addFiles(File file) throws IOException {
 	  
 	  Manipulador manipulador = new Manipulador();
 	  String extensoes = manipulador.getExtensions();
