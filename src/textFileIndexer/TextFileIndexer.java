@@ -35,12 +35,9 @@ public class TextFileIndexer {
   public static void main(String[] args) throws IOException {
 	  Manipulador manipulador = new Manipulador();
 	  String extensoes = manipulador.getExtensions();
-	  //System.out.println("Enter the path where the index will be created: (e.g. /tmp/index or c:\\temp\\index)");
-
+	 
     String indexLocation = null;
-    BufferedReader br = new BufferedReader(
-            new InputStreamReader(System.in)); 
-    //String s = br.readLine();
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
     String s = manipulador.getLocalIndice();
     		
     TextFileIndexer indexer = null;
@@ -48,7 +45,7 @@ public class TextFileIndexer {
       indexLocation = s;
       indexer = new TextFileIndexer(s);
     } catch (Exception ex) {
-      System.out.println("Impossivel criar indice em " + s + ". " + ex.getMessage());
+      System.out.println("Impossivel criar indice em " + s + ". Erro: " + ex.getMessage());
       System.exit(-1);
     }
 
@@ -97,7 +94,7 @@ public class TextFileIndexer {
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
         // 4. display results
-        System.out.println("Found " + hits.length + " hits.");
+        System.out.println("Encontrado " + hits.length + " hits.");
         for(int i=0;i<hits.length;++i) {
           int docId = hits[i].doc;
           Document d = searcher.doc(docId);
@@ -105,7 +102,7 @@ public class TextFileIndexer {
         }
 
       } catch (Exception e) {
-        System.out.println("Error searching " + s + " : " + e.getMessage());
+        System.out.println("Erro ao pesquisar " + s + " : " + e.getMessage());
       }
     }
 
@@ -166,7 +163,7 @@ public class TextFileIndexer {
     int newNumDocs = writer.numDocs();
     System.out.println("");
     System.out.println("************************");
-    System.out.println((newNumDocs - originalNumDocs) + " documents added.");
+    System.out.println((newNumDocs - originalNumDocs) + " documentos adicionados.");
     System.out.println("************************");
 
     queue.clear();
@@ -179,7 +176,7 @@ public class TextFileIndexer {
 	  String extensao[] = extensoes.split(Pattern.quote(",")); //transforma string com virgula em array
 
     if (!file.exists()) {
-      System.out.println(file + " does not exist.");
+      System.out.println(file + " não existe.");
     }
     if (file.isDirectory()) {
       for (File f : file.listFiles()) {
