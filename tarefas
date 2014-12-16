@@ -1,0 +1,8 @@
+O Projeto vai consistir apenas em retornar um array de arquivos que possuem o temo buscado e ao selecionarmos um dos arquivos o programa vai exibir na caixa de texto o conteudo do texto.
+
+Atividades restantes:
+- Gerar os textos. Sugiro pegar págins da wikipedia e copiar como texto puro, umas doze páginas tá bom.
+- Finalizar a classe Gui: Basta colocar nos locais indicados as funcoes marcadas.
+- Desenvolver as funcoes da atividade acima: Autoexplicativo.
+- Revisar usando OO: Definir classes, métodos e atributos como Private, protected, etc, encapsular, e mais essas coisas de POO.
+- TODOS DEVEM LER!!! Todo mundo tem de conhecer o código e fazer/traduzir comentários, o professor vai perguntar.
