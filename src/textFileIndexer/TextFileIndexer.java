@@ -21,9 +21,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-/**
- * This terminal application creates an Apache Lucene index in a folder and adds files into this index
- * based on the input of the user.
+/*
+ * Esta alpicacao cria um indice em um caminho definido pelas configuracoes do
+ * sistema e organiza funcoes uteis ao programa todo.
+ * Usamos uma classe como base e alteramos ela, mantivemos alguns
+ * comentarios por estarem num padrao legal.
  */
 public class TextFileIndexer {
   private static StandardAnalyzer analyzer = new StandardAnalyzer();
@@ -35,11 +37,11 @@ public class TextFileIndexer {
   public static void main(String[] args) throws IOException {
 	  Manipulador manipulador = new Manipulador();
 	  String extensoes = manipulador.getExtensions();
-	 
+
     String indexLocation = null;
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String s = manipulador.getLocalIndice();
-    		
+
     TextFileIndexer indexer = null;
     try {
       indexLocation = s;
@@ -49,9 +51,7 @@ public class TextFileIndexer {
       System.exit(-1);
     }
 
-    //===================================================
-    //read input from user until he enters q for quit
-    //===================================================
+    // Leitura de comandos, 'q' fecha
     while (!s.equalsIgnoreCase("q")) {
       try {
         System.out.println("Entre com um diretorio para ser indexado (q=sair): (Ex.: /home/ron/mydir or c:\\Users\\ron\\mydir)");
@@ -61,22 +61,17 @@ public class TextFileIndexer {
           break;
         }
 
-        //try to add file into the index
+        // Adiciona arquivos ao indice
         indexer.indexFileOrDirectory(s);
       } catch (Exception e) {
         System.out.println("Erro ao indexar " + s + " : " + e.getMessage());
       }
     }
 
-    //===================================================
-    //after adding, we always have to call the
-    //closeIndex, otherwise the index is not created    
-    //===================================================
+    // Fechar o indice vai cria-lo
     indexer.closeIndex();
 
-    //=========================================================
-    // Now search
-    //=========================================================
+    // Busca
     IndexReader reader = DirectoryReader.open(FSDirectory.open(new File(indexLocation)));
     IndexSearcher searcher = new IndexSearcher(reader);
     TopScoreDocCollector collector = TopScoreDocCollector.create(5, true);
@@ -93,7 +88,7 @@ public class TextFileIndexer {
         searcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-        // 4. display results
+        // Imprime o resultado
         System.out.println("Encontrado " + hits.length + " hits.");
         for(int i=0;i<hits.length;++i) {
           int docId = hits[i].doc;
@@ -114,7 +109,7 @@ public class TextFileIndexer {
    * @throws java.io.IOException when exception creating index.
    */
   TextFileIndexer(String indexDir) throws IOException {
-    // the boolean true parameter means to create a new index everytime, 
+    // the boolean true parameter means to create a new index everytime,
     // potentially overwriting any existing files there.
     FSDirectory dir = FSDirectory.open(new File(indexDir));
 
@@ -130,22 +125,14 @@ public class TextFileIndexer {
    * @throws java.io.IOException when exception
    */
   public void indexFileOrDirectory(String fileName) throws IOException {
-    //===================================================
-    //gets the list of files in a folder (if user has submitted
-    //the name of a folder) or gets a single file name (is user
-    //has submitted only the file name) 
-    //===================================================
     addFiles(new File(fileName));
-    
+
     int originalNumDocs = writer.numDocs();
     for (File f : queue) {
       FileReader fr = null;
       try {
         Document doc = new Document();
 
-        //===================================================
-        // add contents of file
-        //===================================================
         fr = new FileReader(f);
         doc.add(new TextField("contents", fr));
         doc.add(new StringField("path", f.getPath(), Field.Store.YES));
@@ -159,7 +146,7 @@ public class TextFileIndexer {
         fr.close();
       }
     }
-    
+
     int newNumDocs = writer.numDocs();
     System.out.println("");
     System.out.println("************************");
@@ -170,7 +157,7 @@ public class TextFileIndexer {
   }
 
   private void addFiles(File file) throws IOException {
-	  
+
 	  Manipulador manipulador = new Manipulador();
 	  String extensoes = manipulador.getExtensions();
 	  String extensao[] = extensoes.split(Pattern.quote(",")); //transforma string com virgula em array
@@ -184,23 +171,20 @@ public class TextFileIndexer {
       }
     } else {
       String filename = file.getName().toLowerCase();
-      //===================================================
-      // Only index text files
-      //===================================================
-      /* if (filename.endsWith(".htm") || filename.endsWith(".html") || 
+      // Opcao para indexar apenas arquivos
+      /* if (filename.endsWith(".htm") || filename.endsWith(".html") ||
               filename.endsWith(".xml") || filename.endsWith(".txt")) {
         queue.add(file);
       } else {
         System.out.println("Skipped " + filename);
       } */
-      ///LT
       for(String ext :extensao){
           if (filename.endsWith('.' + ext)) {
             queue.add(file);
           } else {
             System.out.println("Arquivo n�o adicionado, extensão invalida. " + filename);
-          }  ///LT
-    	  
+          }
+
       }
     }
   }
