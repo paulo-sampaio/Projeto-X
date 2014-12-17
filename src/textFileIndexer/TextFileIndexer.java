@@ -21,6 +21,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 /*
  * Esta alpicacao cria um indice em um caminho definido pelas configuracoes do
  * sistema e organiza funcoes uteis ao programa todo.
@@ -47,9 +49,10 @@ public class TextFileIndexer {
       indexLocation = s;
       indexer = new TextFileIndexer(s);
     } catch (Exception ex) {
-      System.out.println("Impossivel criar indice em " + s + ". Erro: " + ex.getMessage());
+    	JOptionPane.showMessageDialog(null, "Impossivel criar indice em " + s + ". Erro: " + ex.getMessage());
       System.exit(-1);
     }
+    JOptionPane.showMessageDialog(null, "Indice criado com sucesso! "); 
 
     // Leitura de comandos, 'q' fecha
     while (!s.equalsIgnoreCase("q")) {
@@ -64,7 +67,7 @@ public class TextFileIndexer {
         // Adiciona arquivos ao indice
         indexer.indexFileOrDirectory(s);
       } catch (Exception e) {
-        System.out.println("Erro ao indexar " + s + " : " + e.getMessage());
+    	  JOptionPane.showMessageDialog(null, "Erro ao indexar " + s + " : " + e.getMessage());
       }
     }
 
@@ -79,7 +82,7 @@ public class TextFileIndexer {
     s = "";
     while (!s.equalsIgnoreCase("q")) {
       try {
-        System.out.println("Enter the search query (q=quit):");
+        System.out.println("Escreve o que deseja pesquisar. (q=quit):");
         s = br.readLine();
         if (s.equalsIgnoreCase("q")) {
           break;
@@ -97,7 +100,7 @@ public class TextFileIndexer {
         }
 
       } catch (Exception e) {
-        System.out.println("Erro ao pesquisar " + s + " : " + e.getMessage());
+    	  JOptionPane.showMessageDialog(null, "Erro ao pesquisar " + s + " : " + e.getMessage());
       }
     }
 
@@ -139,9 +142,9 @@ public class TextFileIndexer {
         doc.add(new StringField("filename", f.getName(), Field.Store.YES));
 
         writer.addDocument(doc);
-        System.out.println("Added: " + f);
+        System.out.println("Adicionado: " + f);
       } catch (Exception e) {
-        System.out.println("Could not add: " + f);
+        System.out.println("Não foi possivel adicionar: " + f);
       } finally {
         fr.close();
       }
@@ -149,21 +152,23 @@ public class TextFileIndexer {
 
     int newNumDocs = writer.numDocs();
     System.out.println("");
-    System.out.println("************************");
-    System.out.println((newNumDocs - originalNumDocs) + " documentos adicionados.");
-    System.out.println("************************");
+    //System.out.println("************************");
+    JOptionPane.showMessageDialog(null, (newNumDocs - originalNumDocs) + " documentos adicionados.");
+    //System.out.println("************************");
 
     queue.clear();
   }
 
   private void addFiles(File file) throws IOException {
+	  
+	  boolean adicionado = false;
 
 	  Manipulador manipulador = new Manipulador();
 	  String extensoes = manipulador.getExtensions();
 	  String extensao[] = extensoes.split(Pattern.quote(",")); //transforma string com virgula em array
 
     if (!file.exists()) {
-      System.out.println(file + " nÃ£o existe.");
+      System.out.println(file + " não existe.");
     }
     if (file.isDirectory()) {
       for (File f : file.listFiles()) {
@@ -181,8 +186,10 @@ public class TextFileIndexer {
       for(String ext :extensao){
           if (filename.endsWith('.' + ext)) {
             queue.add(file);
-          } else {
-            System.out.println("Arquivo nï¿½o adicionado, extensÃ£o invalida. " + filename);
+            adicionado = true;
+          } 
+          if (adicionado == false) {
+        	 System.out.println("Arquivo não adicionado, extensão invalida. " + filename);
           }
 
       }
