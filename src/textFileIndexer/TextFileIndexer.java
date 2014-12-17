@@ -17,6 +17,8 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import Gui.Estudos;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -53,7 +55,7 @@ public class TextFileIndexer {
       System.exit(-1);
     }
     JOptionPane.showMessageDialog(null, "Indice criado com sucesso! "); 
-
+   
     // Leitura de comandos, 'q' fecha
     while (!s.equalsIgnoreCase("q")) {
       try {
@@ -177,21 +179,15 @@ public class TextFileIndexer {
     } else {
       String filename = file.getName().toLowerCase();
       // Opcao para indexar apenas arquivos
-      /* if (filename.endsWith(".htm") || filename.endsWith(".html") ||
-              filename.endsWith(".xml") || filename.endsWith(".txt")) {
-        queue.add(file);
-      } else {
-        System.out.println("Skipped " + filename);
-      } */
+//	Verifica se a extensão está cadastrada do properties.
       for(String ext :extensao){
           if (filename.endsWith('.' + ext)) {
             queue.add(file);
             adicionado = true;
           } 
-          if (adicionado == false) {
-        	 System.out.println("Arquivo não adicionado, extensão invalida. " + filename);
-          }
-
+      }
+      if (adicionado == false) {
+    	 System.out.println("Arquivo não adicionado, extensão invalida. " + filename);
       }
     }
   }
